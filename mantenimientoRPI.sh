@@ -135,7 +135,7 @@ Instalar_Postfix()
                 # sudo service smtp restart
 
                 echo -e "$BLUE\nDirección de correo:$GREEN $DIRECCION $BLUE\nHost:$GREEN $HOSTS\n"
-                echo -e "El correo ha sido configurado" | mail -s "Confirmacion servidor ssmtp" $DIRECCION #carlosdy3d@gmail.com
+                echo -e "El correo ha sido configurado" | mail -s "Confirmacion servidor ssmtp" $DIRECCION 
                 if [ "$(echo $?)" == "1" ]; then
                         echo -e "$RED Error al ejecutar comando mail, revisa /etc/ssmtp/ssmtp.conf$NC"
                 fi
@@ -211,30 +211,23 @@ configurar_dhcpcd ()
 
         # Hace una copia de seguridad del archivo /etc/dhcpcd.conf
         echo -e "$GREEN\nHaciendo copia de seguridad de /etc/dhcpcd.conf...\n$NC"
-        #cp /etc/dhcpcd.conf /etc/dhcpcd.conf.old
+        sudo cp /etc/dhcpcd.conf /etc/dhcpcd.conf.old
 
         # Añade las lineas de configuración en el archivo /etc/dhcpcd.conf
         echo -e "$OTHER\nAñadiendo lineas de configuración al archivo dhcpcd.conf$NC"
         echo -e "\n# Static ip Address:\
                         \nstatic ip_address=$IP/24\
                         \ninterface $INTERFACE\
-                        \nstatic_routers=192.168.1.1\
+                        \nstatic_routers=192.168.0.1\
                         \nstatic domain_name_servers=8.8.8.8 8.8.4.4\
-                " > /home/peyutron/Scripts/Raspberry/aa.txt #/etc/dhcpcd.conf
-        # cat /etc/dhcpcd.conf
-        cat /home/peyutron/Scripts/Raspberry/aa.txt
-        #echo -e "\n# Static ip Address:\
-        #                \nstatic ip_address=192.168.1.51/24\
-        #                \ninterface eth0\
-        #                \nstatic_routers=192.168.1.1\
-        #                \nstatic domain_name_servers=8.8.8.8 8.8.4.4\
-        #        " >> /etc/dhcpcd.conf
+                " > /etc/dhcpcd.conf
+        cat /etc/dhcpcd.conf
 }
 
 function check_interfaces () 
 {
 
-        echo -e "$OTHER \n*** Interfaces de Red Disponibles ***\n$NC" >&2
+        echo -e "$OTHER \n** Interfaces de Red Disponibles **\n$NC" >&2
 
         interfaces=($(ip -o link show | awk -F': ' '{print $2}' | grep -v lo))
 
